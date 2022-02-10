@@ -3,7 +3,7 @@ VALUES
   (1, 'admin&finance'),
   (2, "mark&com"),
   (3, 'R&D'),
-  (4, 'KnowledgeTranslation');
+  (4, 'Knowledge Translation');
 
 INSERT INTO roles (id, title, salary, department_id)
 VALUES

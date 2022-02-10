@@ -13,9 +13,6 @@ const res = require("express/lib/response");
 // console.table
 const cTable = require("console.table");
 
-// // options array
-// const optionsArray = [];
-
 // start of prompt
 
 console.log(`
@@ -59,30 +56,39 @@ const promptUser = () => {
           console.table("Employees", results);
         });
       } else if (options === "add a department") {
-        return inquirer
-          .prompt([
-            {
-              type: "input",
-              name: "title",
-              message: "What is the title of the department? (Required)",
-              validate: (titleInput) => {
-                if (titleInput) {
-                  return true;
-                } else {
-                  console.log("Please enter a title!");
-                  return false;
-                }
+        return (
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "title",
+                message: "What is the title of the department? (Required)",
+                validate: (titleInput) => {
+                  if (titleInput) {
+                    return true;
+                  } else {
+                    console.log("Please enter a title!");
+                    return false;
+                  }
+                },
               },
-            },
-          ])
-          .then(({ title }) => {
-            db.query(
-              `INSERT INTO departments (name) VALUES (${title})`,
-              function (err, results) {
-                console.log(results);
-              }
-            );
-          });
+            ])
+            // .then(({ title }) => {
+            //   db.query(
+            //     `INSERT INTO departments (name) VALUES (${title})`,
+            //     function (err, results) {
+            //       console.log(results);
+            //     }
+            //   );
+            // });
+
+            .then(({ title }) => {
+              const sql = `INSERT INTO departments (name) VALUES (?)`;
+              db.query(sql, title, function (err, results) {
+                console.log(`Department added`);
+              });
+            })
+        );
       }
     });
 };
