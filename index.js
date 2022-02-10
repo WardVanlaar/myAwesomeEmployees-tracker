@@ -19,13 +19,12 @@ const cTable = require("console.table");
 // start of prompt
 
 console.log(`
- ---------------------------------
-|                                 |
-| EMPLOYEE                        |
-|           MANAGER               |
-|                                 |
-|                                 |
- ---------------------------------
+ -----------------------------------------------
+|  __         __         __        __   __      |
+| |_   |\/|  |__|  |    |  |  \/  |_   |_       |
+| |__  |  |  |     |__  |__|  /   |__  |__      |
+|                                 __   __  __   |
+ -----------------------------------------------
 `);
 
 const promptUser = () => {
@@ -49,15 +48,15 @@ const promptUser = () => {
     .then(({ options }) => {
       if (options === "view all departments") {
         db.query(`SELECT * FROM departments`, function (err, results) {
-          console.table("departments", results);
+          console.table("Departments", results);
         });
       } else if (options === "view all roles") {
         db.query(`SELECT * FROM roles`, function (err, results) {
-          console.table("roles", results);
+          console.table("Roles", results);
         });
       } else if (options === "view all employees") {
         db.query(`SELECT * FROM employees`, function (err, results) {
-          console.table("employees", results);
+          console.table("Employees", results);
         });
       } else if (options === "add a department") {
         return inquirer
@@ -78,7 +77,7 @@ const promptUser = () => {
           ])
           .then(({ title }) => {
             db.query(
-              `INSERT INTO departments (${title}) VALUES (?)`,
+              `INSERT INTO departments (name) VALUES (${title})`,
               function (err, results) {
                 console.log(results);
               }
