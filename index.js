@@ -34,21 +34,20 @@ const promptUser = () => {
     ])
     .then(({ options }) => {
       if (options === "view all departments") {
-        const sql = `SELECT * FROM departments`;
-
-        db.query(sql, (err, rows) => {
-            if (err) {
-              res.status(500).json({ error: err.message });
-              return;
-            }
-            res.json({
-              message: 'success',
-              data: rows
-            });
-          });
-
-        // console.log(res.json);
-        // console.table("departments", {sql});
+        db.query(`SELECT * FROM departments`, function (err, results) {
+          console.log(results);
+            // console.table("departments", results);
+        });
+      } else if (options === "view all roles") {
+        db.query(`SELECT * FROM roles`, function (err, results) {
+          console.log(results);
+          //   console.table("departments", results);
+        });
+      } else if (options === "view all employees") {
+        db.query(`SELECT * FROM employees`, function (err, results) {
+          console.log(results);
+        //   console.table("departments", results);
+        });
       }
     });
 };
