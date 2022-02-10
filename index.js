@@ -10,10 +10,24 @@ const fs = require("fs");
 const inquirer = require("inquirer");
 const res = require("express/lib/response");
 
+// console.table
+const cTable = require("console.table");
+
 // // options array
 // const optionsArray = [];
 
 // start of prompt
+
+console.log(`
+ ---------------------------------
+|                                 |
+| EMPLOYEE                        |
+|           MANAGER               |
+|                                 |
+|                                 |
+ ---------------------------------
+`);
+
 const promptUser = () => {
   return inquirer
     .prompt([
@@ -35,19 +49,41 @@ const promptUser = () => {
     .then(({ options }) => {
       if (options === "view all departments") {
         db.query(`SELECT * FROM departments`, function (err, results) {
-          console.log(results);
-            // console.table("departments", results);
+          console.table("departments", results);
         });
       } else if (options === "view all roles") {
         db.query(`SELECT * FROM roles`, function (err, results) {
-          console.log(results);
-          //   console.table("departments", results);
+          console.table("roles", results);
         });
       } else if (options === "view all employees") {
         db.query(`SELECT * FROM employees`, function (err, results) {
-          console.log(results);
-        //   console.table("departments", results);
+          console.table("employees", results);
         });
+      } else if (options === "add a department") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "title",
+              message: "What is the title of the department? (Required)",
+              validate: (titleInput) => {
+                if (titleInput) {
+                  return true;
+                } else {
+                  console.log("Please enter a title!");
+                  return false;
+                }
+              },
+            },
+          ])
+          .then(({ title }) => {
+            db.query(
+              `INSERT INTO departments (${title}) VALUES (?)`,
+              function (err, results) {
+                console.log(results);
+              }
+            );
+          });
       }
     });
 };
