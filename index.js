@@ -88,7 +88,8 @@ const promptUser = () => {
             {
               type: "input",
               name: "title",
-              message: "What is the title of the role would you like to add? (Required)",
+              message:
+                "What is the title of the role would you like to add? (Required)",
               validate: (titleInput) => {
                 if (titleInput) {
                   return true;
@@ -114,10 +115,13 @@ const promptUser = () => {
             {
               type: "input",
               name: "department",
-              message: "What department does this role belong to? Use the corresponding number ID from the departments table.
+              message:
+                "What department does this role belong to? Use the corresponding number ID from the departments table.",
               validate: (departmentInput) => {
                 if (isNaN(departmentInput)) {
-                  console.log("Please enter a department using its corresponding number");
+                  console.log(
+                    "Please enter a department using its corresponding number"
+                  );
                   return false;
                 } else {
                   return true;
@@ -125,8 +129,8 @@ const promptUser = () => {
               },
             },
           ])
-          .then(roleData => {
-            let {title, salary, department} = roleData
+          .then((roleData) => {
+            let { title, salary, department } = roleData;
 
             const sql = `INSERT INTO departments (title, salary, department_id) VALUES (${title}, ${salary}, ${department})`;
             db.query(sql, roleData, function (err, results) {
