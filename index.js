@@ -129,14 +129,86 @@ const promptUser = () => {
               },
             },
           ])
-          .then((roleData) => {
-            let { title, salary, department } = roleData;
-
-            const sql = `INSERT INTO departments (title, salary, department_id) VALUES (${title}, ${salary}, ${department})`;
-            db.query(sql, roleData, function (err, results) {
-              console.log(results);
+          .then((responseObj) => {
+            const [title, salary, department] = Object.values(responseObj);
+            const sql = `INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)`;
+            db.query(sql, [title, salary, department], function (err, results) {
+              console.log("Role added");
               promptUser();
             });
+          });
+      } else if (options === "add an employee") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "firstName",
+              message: "What is the first name of the emplyee? (Required)",
+              validate: (firstNameInput) => {
+                if (firstNameInput) {
+                  return true;
+                } else {
+                  console.log("Please enter a first name!");
+                  return false;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "lastName",
+              message: "What is the last name of the employee? (Required)",
+              validate: (lastNameInput) => {
+                if (lastNameInput) {
+                  return true;
+                } else {
+                  console.log("Please enter a first name!");
+                  return false;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "role_ID",
+              message:
+                "What is the role of this employee? Use the corresponding role ID from the roles table.",
+              validate: (salaryInput) => {
+                if (isNaN(salaryInput)) {
+                  console.log("Please enter a role using numbers only");
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "manager_ID",
+              message:
+                "Who is this employee's manager? Use the corresponding number ID from the employee table.",
+              validate: (departmentInput) => {
+                if (isNaN(departmentInput)) {
+                  console.log(
+                    "Please enter a number representing the manager's employee ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [firstName, lastName, role_ID, manager_ID] =
+              Object.values(responseObj);
+            const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
+            db.query(
+              sql,
+              [firstName, lastName, role_ID, manager_ID],
+              function (err, results) {
+                console.log("Employee added");
+                promptUser();
+              }
+            );
           });
       }
     });
