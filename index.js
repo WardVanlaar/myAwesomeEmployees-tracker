@@ -39,6 +39,7 @@ const promptUser = () => {
           "add a role",
           "add an employee",
           "update an employee role",
+          "update and employee's manager",
         ],
       },
     ])
@@ -143,7 +144,7 @@ const promptUser = () => {
             {
               type: "input",
               name: "firstName",
-              message: "What is the first name of the emplyee? (Required)",
+              message: "What is the first name of the employee? (Required)",
               validate: (firstNameInput) => {
                 if (firstNameInput) {
                   return true;
@@ -209,6 +210,90 @@ const promptUser = () => {
                 promptUser();
               }
             );
+          });
+      } else if (options === "update an employee role") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "role_id",
+              message:
+                "What is the new role you want to assign to this employee? Use the corresponding ID from the roles table.",
+              validate: (role_idInput) => {
+                if (isNaN(role_idInput)) {
+                  console.log(
+                    "Please enter a number representing the new role's ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "employee_id",
+              message:
+                "What is the ID of the employee whose role you want to update? Use the corresponding role ID from the employee table.",
+              validate: (employee_idInput) => {
+                if (isNaN(employee_idInput)) {
+                  console.log("Please enter an employee ID using numbers only");
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [role_id, employee_id] = Object.values(responseObj);
+            const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
+            db.query(sql, [role_id, employee_id], function (err, results) {
+              console.log("Employee role updated");
+              promptUser();
+            });
+          });
+      } else if (options === "update an employee's manager") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "manager_id",
+              message:
+                "What is the employee's new manager? Use the corresponding ID from the employee table.",
+              validate: (role_idInput) => {
+                if (isNaN(role_idInput)) {
+                  console.log(
+                    "Please enter a number representing the new manager's employee ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "employee_id",
+              message:
+                "What is the ID of the employee whose manager you want to update? Use the corresponding role ID from the employee table.",
+              validate: (employee_idInput) => {
+                if (isNaN(employee_idInput)) {
+                  console.log("Please enter an employee ID using numbers only");
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [manager_id, employee_id] = Object.values(responseObj);
+            const sql = `UPDATE employees SET manager_id = ? WHERE id = ?`;
+            db.query(sql, [manager_id, employee_id], function (err, results) {
+              console.log("Employee's manager updated");
+              promptUser();
+            });
           });
       }
     });
