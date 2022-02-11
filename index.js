@@ -1,10 +1,5 @@
 const db = require("./db/connection.js");
 
-// profiles
-const Department = require("./lib/department");
-const Employee = require("./lib/employee");
-const Role = require("./lib/role");
-
 // node modules
 const fs = require("fs");
 const inquirer = require("inquirer");
@@ -35,11 +30,12 @@ const promptUser = () => {
           "view all departments",
           "view all roles",
           "view all employees",
+          "view employees by manager",
           "add a department",
           "add a role",
           "add an employee",
           "update an employee role",
-          "update and employee's manager",
+          "update an employee's manager",
         ],
       },
     ])
@@ -59,6 +55,15 @@ const promptUser = () => {
           console.table("Employees", results);
           promptUser();
         });
+      } else if (options === "view employees by manager") {
+        db.query(
+          `SELECT * FROM employees LEFT OUTER JOIN managers 
+        ON employees.manager_id = managers.id `,
+          function (err, results) {
+            console.table("Employees by manager", results);
+            promptUser();
+          }
+        );
       } else if (options === "add a department") {
         return inquirer
           .prompt([
@@ -260,7 +265,7 @@ const promptUser = () => {
               type: "input",
               name: "manager_id",
               message:
-                "What is the employee's new manager? Use the corresponding ID from the employee table.",
+                "What is the ID of the employee's new manager? Use the corresponding ID from the employee table.",
               validate: (role_idInput) => {
                 if (isNaN(role_idInput)) {
                   console.log(
