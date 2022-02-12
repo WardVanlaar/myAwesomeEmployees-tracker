@@ -1,4 +1,4 @@
-INSERT INTO managers (employee_id, first_name, last_name)
+INSERT INTO managers (employee_id, manager_first_n, manager_last_n)
 VALUES
   (5, 'Derek', 'Jarman'),
   (12,'Samuel', 'Delany');

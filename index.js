@@ -61,14 +61,19 @@ const promptUser = () => {
           promptUser();
         });
       } else if (options === "view employees by manager") {
-        const sql = `SELECT * FROM employees LEFT JOIN managers ON employees.manager_id = managers.id `;
+        const sql = `SELECT managers.id, managers.manager_first_n, managers.manager_last_n, employees.first_name, 
+                      employees.last_name, employees.role_id AS employee_role FROM employees LEFT JOIN managers ON 
+                      employees.manager_id = managers.id ORDER BY managers.id `;
         db.query(sql, function (err, results) {
           console.table("Employees by manager", results);
           promptUser();
         });
       } else if (options === "view employees by department") {
-        const sql = ` SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
-                        LEFT JOIN departments ON roles.department_id = departments.id`;
+        const sql = ` SELECT departments.id, departments.dep_name, employees.first_name, employees.last_name, 
+                      employees.role_id, roles.title, roles.salary FROM employees LEFT JOIN roles ON 
+                      employees.role_id = roles.id 
+                      LEFT JOIN departments ON roles.department_id = departments.id
+                      ORDER BY departments.id`;
         db.query(sql, function (err, results) {
           console.table("Employees by department", results);
           promptUser();

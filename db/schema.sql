@@ -6,8 +6,8 @@ DROP TABLE IF EXISTS managers;
 CREATE TABLE managers (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
   employee_id INTEGER,
-  first_name VARCHAR(30) NOT NULL,
-  last_name VARCHAR(30) NOT NULL
+  manager_first_n VARCHAR(30) NOT NULL,
+  manager_last_n VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE departments (
