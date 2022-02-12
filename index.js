@@ -30,6 +30,7 @@ const promptUser = () => {
           "view all departments",
           "view all roles",
           "view all employees",
+          "view all managers",
           "view employees by manager",
           "view employees by department",
           "add a department",
@@ -41,6 +42,7 @@ const promptUser = () => {
           "delete a role",
           "delete an employee",
           "view department budget",
+          "exit employee tracker"
         ],
       },
     ])
@@ -58,6 +60,11 @@ const promptUser = () => {
       } else if (options === "view all employees") {
         db.query(`SELECT * FROM employees`, function (err, results) {
           console.table("Employees", results);
+          promptUser();
+        });
+      } else if (options === "view all managers") {
+        db.query(`SELECT * FROM managers`, function (err, results) {
+          console.table("Managers", results);
           promptUser();
         });
       } else if (options === "view employees by manager") {
@@ -408,7 +415,10 @@ const promptUser = () => {
           console.table("Employees by manager", results);
           promptUser();
         });
+      } else if (options === "exit employee tracker") {
+        process.exit(1);
       }
+
     });
 };
 
