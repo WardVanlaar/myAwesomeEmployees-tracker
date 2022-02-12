@@ -67,10 +67,10 @@ const promptUser = () => {
           promptUser();
         });
       } else if (options === "view employees by department") {
-          const sql = `SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
+          const sql = ` SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
                         LEFT JOIN departments ON roles.department_id = departments.id`;
           db.query(sql, function (err, results) {
-            console.table("Employees by manager", results);
+            console.table("Employees by department", results);
             promptUser();
           });
       } else if (options === "add a department") {
@@ -90,9 +90,10 @@ const promptUser = () => {
               },
             },
           ])
-          .then(({ title }) => {
+          .then((responseObj) => {
+            const [title] = Object.values(responseObj);
             const sql = `INSERT INTO departments (name) VALUES (?)`;
-            db.query(sql, title, function (err, results) {
+            db.query(sql, [title], function (err, results) {
               console.log(`Department added`);
               promptUser();
             });
@@ -394,32 +395,13 @@ const promptUser = () => {
             });
           });
         } else if (options === "view department budget") {
-          return inquirer
-            .prompt([
-              {
-                type: "input",
-                name: "delete_dep",
-                message:
-                  "What is the ID of the department whose budget you want to view? Use the corresponding ID from the department table.",
-                validate: (delete_depInput) => {
-                  if (isNaN(delete_depInput)) {
-                    console.log(
-                      "Please enter a number representing the department's ID"
-                    );
-                    return false;
-                  } else {
-                    return true;
-                  }
-                },
-              },
-            ])
-            .then((responseObj) => {
-              const [delete_dep] = Object.values(responseObj);
-              const sql = `DELETE FROM departments WHERE id = ?`;
-              db.query(sql, [delete_dep], function (err, results) {
-                console.log("Department deleted");
-                promptUser();
-              });
+            const sql = `SELECT employees.id, sum(salary) AS budget FROM employees
+                          LEFT JOIN roles ON roles.id=employees.role_id 
+                          LEFT JOIN departments on departments.id=roles.department_id 
+                          GROUP BY roles.department_id`;
+            db.query(sql, function (err, results) {
+              console.table("Employees by manager", results);
+              promptUser();
             });
           }
     });
