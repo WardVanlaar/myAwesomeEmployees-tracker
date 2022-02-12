@@ -7,7 +7,6 @@ const res = require("express/lib/response");
 
 // console.table
 const cTable = require("console.table");
-const connection = require("mysql2/typings/mysql/lib/connection");
 
 // start of prompt
 
@@ -93,7 +92,7 @@ const promptUser = () => {
           ])
           .then((responseObj) => {
             const [title] = Object.values(responseObj);
-            const sql = `INSERT INTO departments (name) VALUES (?)`;
+            const sql = `INSERT INTO departments (dep_name) VALUES (?)`;
             db.query(sql, [title], function (err, results) {
               console.log(`Department added`);
               promptUser();
