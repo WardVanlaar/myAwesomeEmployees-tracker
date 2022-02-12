@@ -7,7 +7,7 @@ const res = require("express/lib/response");
 
 // console.table
 const cTable = require("console.table");
-const Connection = require("mysql2/typings/mysql/lib/Connection");
+const connection = require("mysql2/typings/mysql/lib/connection");
 
 // start of prompt
 
