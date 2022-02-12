@@ -11,12 +11,12 @@ const cTable = require("console.table");
 // start of prompt
 
 console.log(`
- -----------------------------------------------
-|  __         __         __        __   __      |
-| |_   |\/|  |__|  |    |  |  \/  |_   |_       |
-| |__  |  |  |     |__  |__|  /   |__  |__      |
-|                                 __   __  __   |
- -----------------------------------------------
+ -------------------------------
+|                               |
+|     EMPLOYEE                  |
+|                 MANAGER       |
+|                               |
+ -------------------------------
 `);
 
 const promptUser = () => {
@@ -39,7 +39,8 @@ const promptUser = () => {
           "update an employee's manager",
           "delete a department",
           "delete a role",
-          "delete an employee"
+          "delete an employee",
+          "view department budget",
         ],
       },
     ])
@@ -65,6 +66,13 @@ const promptUser = () => {
           console.table("Employees by manager", results);
           promptUser();
         });
+      } else if (options === "view employees by department") {
+          const sql = `SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
+                        LEFT JOIN departments ON roles.department_id = departments.id`;
+          db.query(sql, function (err, results) {
+            console.table("Employees by manager", results);
+            promptUser();
+          });
       } else if (options === "add a department") {
         return inquirer
           .prompt([
@@ -381,11 +389,39 @@ const promptUser = () => {
             const [delete_emp] = Object.values(responseObj);
             const sql = `DELETE FROM employees WHERE id = ?`;
             db.query(sql, [delete_emp], function (err, results) {
-              console.log("Department deleted");
+              console.log("Employee deleted");
               promptUser();
             });
           });
-        }
+        } else if (options === "view department budget") {
+          return inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "delete_dep",
+                message:
+                  "What is the ID of the department whose budget you want to view? Use the corresponding ID from the department table.",
+                validate: (delete_depInput) => {
+                  if (isNaN(delete_depInput)) {
+                    console.log(
+                      "Please enter a number representing the department's ID"
+                    );
+                    return false;
+                  } else {
+                    return true;
+                  }
+                },
+              },
+            ])
+            .then((responseObj) => {
+              const [delete_dep] = Object.values(responseObj);
+              const sql = `DELETE FROM departments WHERE id = ?`;
+              db.query(sql, [delete_dep], function (err, results) {
+                console.log("Department deleted");
+                promptUser();
+              });
+            });
+          }
     });
 };
 
