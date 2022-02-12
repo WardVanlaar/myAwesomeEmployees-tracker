@@ -395,7 +395,7 @@ const promptUser = () => {
             });
           });
       } else if (options === "view department budget") {
-        const sql = `SELECT employees.id, sum(salary) AS budget FROM employees
+        const sql = `SELECT departments.dep_name, sum(salary) AS budget FROM employees
                           LEFT JOIN roles ON roles.id=employees.role_id 
                           LEFT JOIN departments on departments.id=roles.department_id 
                           GROUP BY roles.department_id`;
