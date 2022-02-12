@@ -67,12 +67,12 @@ const promptUser = () => {
           promptUser();
         });
       } else if (options === "view employees by department") {
-          const sql = ` SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
+        const sql = ` SELECT * FROM employees LEFT JOIN roles ON employees.role_id = roles.id 
                         LEFT JOIN departments ON roles.department_id = departments.id`;
-          db.query(sql, function (err, results) {
-            console.table("Employees by department", results);
-            promptUser();
-          });
+        db.query(sql, function (err, results) {
+          console.table("Employees by department", results);
+          promptUser();
+        });
       } else if (options === "add a department") {
         return inquirer
           .prompt([
@@ -394,16 +394,16 @@ const promptUser = () => {
               promptUser();
             });
           });
-        } else if (options === "view department budget") {
-            const sql = `SELECT employees.id, sum(salary) AS budget FROM employees
+      } else if (options === "view department budget") {
+        const sql = `SELECT employees.id, sum(salary) AS budget FROM employees
                           LEFT JOIN roles ON roles.id=employees.role_id 
                           LEFT JOIN departments on departments.id=roles.department_id 
                           GROUP BY roles.department_id`;
-            db.query(sql, function (err, results) {
-              console.table("Employees by manager", results);
-              promptUser();
-            });
-          }
+        db.query(sql, function (err, results) {
+          console.table("Employees by manager", results);
+          promptUser();
+        });
+      }
     });
 };
 
