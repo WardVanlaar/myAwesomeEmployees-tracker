@@ -19,7 +19,7 @@ Programming languages used:
 
 
 ## Installation
-Clone this repo, install node.js, and run npm install in the terminal.
+Clone this repo, install node.js, and run npm install in the terminal. To start the application type node index.js in the terminal.
 
 ## Usage
 The App can be used to track employees in your company.
