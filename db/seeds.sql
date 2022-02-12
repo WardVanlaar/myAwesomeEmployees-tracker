@@ -1,9 +1,4 @@
-INSERT INTO managers (id, employee_id, first_name, last_name)
-VALUES
-  (1, 5, 'Derek', 'Jarman'),
-  (2, 12,'Samuel', 'Delany');
-
-INSERT INTO departments (id, name)
+INSERT INTO departments (id, dep_name)
 VALUES
   (1, 'admin&finance'),
   (2, "mark&com"),
@@ -19,6 +14,11 @@ VALUES
     (5, 'Senior Research Scientist', 120000, 3),
     (6, 'KT specialist', 95000, 4),
     (7, 'President&CEO', 150000, NULL);
+
+INSERT INTO managers (id, employee_id, first_name, last_name)
+VALUES
+  (1, 5, 'Derek', 'Jarman'),
+  (2, 12,'Samuel', 'Delany');
 
 INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES

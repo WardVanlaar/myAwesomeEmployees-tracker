@@ -31,11 +31,15 @@ const promptUser = () => {
           "view all roles",
           "view all employees",
           "view employees by manager",
+          "view employees by department",
           "add a department",
           "add a role",
           "add an employee",
           "update an employee role",
           "update an employee's manager",
+          "delete a department",
+          "delete a role",
+          "delete an employee"
         ],
       },
     ])
@@ -56,14 +60,11 @@ const promptUser = () => {
           promptUser();
         });
       } else if (options === "view employees by manager") {
-        db.query(
-          `SELECT * FROM employees LEFT OUTER JOIN managers 
-        ON employees.manager_id = managers.id `,
-          function (err, results) {
-            console.table("Employees by manager", results);
-            promptUser();
-          }
-        );
+        const sql = `SELECT * FROM employees LEFT JOIN managers ON employees.manager_id = managers.id `;
+        db.query(sql, function (err, results) {
+          console.table("Employees by manager", results);
+          promptUser();
+        });
       } else if (options === "add a department") {
         return inquirer
           .prompt([
@@ -300,7 +301,91 @@ const promptUser = () => {
               promptUser();
             });
           });
-      }
+      } else if (options === "delete a department") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "delete_dep",
+              message:
+                "What is the ID of the department you want to delete? Use the corresponding ID from the department table.",
+              validate: (delete_depInput) => {
+                if (isNaN(delete_depInput)) {
+                  console.log(
+                    "Please enter a number representing the department's ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [delete_dep] = Object.values(responseObj);
+            const sql = `DELETE FROM departments WHERE id = ?`;
+            db.query(sql, [delete_dep], function (err, results) {
+              console.log("Department deleted");
+              promptUser();
+            });
+          });
+      } else if (options === "delete a role") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "delete_role",
+              message:
+                "What is the ID of the role you want to delete? Use the corresponding ID from the roles table.",
+              validate: (delete_roleInput) => {
+                if (isNaN(delete_roleInput)) {
+                  console.log(
+                    "Please enter a number representing the role's ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [delete_role] = Object.values(responseObj);
+            const sql = `DELETE FROM roles WHERE id = ?`;
+            db.query(sql, [delete_role], function (err, results) {
+              console.log("Role deleted");
+              promptUser();
+            });
+          });
+      } else if (options === "delete an employee") {
+        return inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "delete_emp",
+              message:
+                "What is the ID of the employee you want to delete? Use the corresponding ID from the employees table.",
+              validate: (delete_empInput) => {
+                if (isNaN(delete_empInput)) {
+                  console.log(
+                    "Please enter a number representing the employee's ID"
+                  );
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            },
+          ])
+          .then((responseObj) => {
+            const [delete_emp] = Object.values(responseObj);
+            const sql = `DELETE FROM employees WHERE id = ?`;
+            db.query(sql, [delete_emp], function (err, results) {
+              console.log("Department deleted");
+              promptUser();
+            });
+          });
+        }
     });
 };
 
