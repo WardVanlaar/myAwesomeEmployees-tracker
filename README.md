@@ -11,7 +11,7 @@
 
 
 ## Description
-With this App you can track employees in your company. Things such their role, salary and department can be viewed and updated.
+With this App you can track employees in your company. Things such as their role, salary and department can be viewed and updated.
 
 Programming languages used:
 * Node.js
